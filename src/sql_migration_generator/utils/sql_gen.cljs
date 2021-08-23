@@ -35,3 +35,25 @@
 ;; I am trying to avoid having the user define join-tables, but it may
 ;; make sense for them to atleast have the ability to define it if they want,
 ;; and provide syntactic sugar to automatically define it, if possible.
+
+;; What about:
+;; {:tables [{:name "parent1"
+;;            :fields [:id "Long" :name "String"]}
+;;           {:name "child1"
+;;            :fields [:id "Long" :name "String"]}
+;;           {:name "child2"
+;;            :fields [:id "Long" :description "Text"]}
+;;           {:name "parent2"
+;;            :fields [:id "Long" :body "Text"]}
+;;           ]
+;;  :join-tables [{"parent2_child2"
+;;                 :fields [:parent2_id "Long"
+;;                          :child2_id "Long"]}]
+;;  :relationships [{"parent1"
+;;                   :has-many ["child1"]
+;;                   :has-one ["child2"]}
+;;                  {"parent2"
+;;                   :has-one ["child1"]}
+;;                  ]}
+;; I think this works. I'll define a test with this and see if we have what we need to
+;; generate the migrations.
