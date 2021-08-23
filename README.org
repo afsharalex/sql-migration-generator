@@ -4,3 +4,17 @@
 Demo project in Clojurescript using reagent and re-frame. The app will generate SQL migrations based on the models defined by the user.
 
 See SETUP.md for instructions.
+
+* Testing
+In order to run the tests you must install karma:
+`npm i -g karma-cli`
+
+Then you can either run:
+`shadow-cljs compile karma-test`
+to compile once, or:
+`shadow-cljs watch karma-test`
+to continually compile and in another terminal:
+`karma start --single-run`
+to run once, or:
+`karma start`
+to continually run tests.
