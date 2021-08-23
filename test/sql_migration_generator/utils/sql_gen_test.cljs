@@ -26,6 +26,16 @@
 
 (t/deftest sql-structure
   (t/testing "tables without relationships"
-    (t/is (= 1 1))
+    (t/is (= "CREATE TABLE TestTable (ID int, Name varchar(255));"
+             (sut/gen-migration {:tables [{:name "TestTable"
+                                           :fields [{:name "ID" :type "int"}
+                                                    {:name "Name" :type "varchar(255)"}]}]
+                                 :relationships []})))
+
+    (t/is (= "CREATE TABLE TestTable (ID int, Description TEXT);"
+             (sut/gen-migration {:tables [{:name "TestTable"
+                                           :fields [{:name "ID" :type "int"}
+                                                    {:name "Description" :type "TEXT"}]}]
+                                 :relationships []})))
     )
   )

@@ -1,4 +1,5 @@
-(ns sql-migration-generator.utils.sql-gen)
+(ns sql-migration-generator.utils.sql-gen
+  (:require [clojure.string :as str]))
 
 ;; Need to think about the structure for defining models and relationships.
 ;; Something like:
@@ -57,3 +58,30 @@
 ;;                  ]}
 ;; I think this works. I'll define a test with this and see if we have what we need to
 ;; generate the migrations.
+
+(defn gen-migration
+  "Generate migrations for supplied data definitions structure."
+  [definitions]
+  "CREATE TABLE TestTable (ID int, Name varchar(255));"
+  (let [{:keys [name fields]} (first (:tables definitions))]
+    (str "CREATE TABLE " name
+         " ("
+         (:name (first fields))
+         " "
+         (:type (first fields))
+         ", "
+         (:name (last fields))
+         " "
+         (:type (last fields))
+         ");")))
+
+(comment
+  (def test-table
+    {:tables [{:name "TestTable"
+               :fields [{:name "ID" :type "int"}
+                        {:name "Description" :type "TEXT"}]}]
+     :relationships []})
+
+  (let [{:keys [name fields]} (first (:tables test-table))]
+    (first fields))
+  )
