@@ -25,7 +25,7 @@
 ;; to generate migrations.
 
 (t/deftest sql-structure
-  (t/testing "tables without relationships"
+  (t/testing "table without relationships"
     (t/is (= "CREATE TABLE TestTable ( ID int , Name varchar(255) );\n"
              (sut/gen-migration {:tables [{:name "TestTable"
                                            :fields [{:name "ID" :type "int"}
@@ -37,6 +37,19 @@
                                            :fields [{:name "ID" :type "int"}
                                                     {:name "Description" :type "TEXT"}]}]
                                  :relationships []})))
+    )
+
+  (t/testing "tables with many fields"
+    (t/is (= "CREATE TABLE TestTable (\n\tID int,\n\tName varchar(255),\n\tDescription TEXT,\n\tThings int\n);"
+             (sut/gen-migration {:tables [{:name "TestTable"
+                                           :fields [{:name "ID" :type "int"}
+                                                    {:name "Name" :type "varchar(255)"}
+                                                    {:name "Description" :type "TEXT"}
+                                                    {:name "Things" :type "int"}]}]
+                                 :relationships []})))
+    )
+
+  (t/testing "multiple tables without relationships"
     (t/is (= "CREATE TABLE Table1 ( ID int , Name varchar(255) );\nCREATE TABLE Table2 ( ID int , Description TEXT );\n"
              (sut/gen-migration {:tables [{:name "Table1"
                                            :fields [{:name "ID" :type "int"}
