@@ -59,21 +59,29 @@
 ;; I think this works. I'll define a test with this and see if we have what we need to
 ;; generate the migrations.
 
-(defn gen-migration
-  "Generate migrations for supplied data definitions structure."
-  [definitions]
-  "CREATE TABLE TestTable (ID int, Name varchar(255));"
-  (let [{:keys [name fields]} (first (:tables definitions))]
+(defn gen-table-migration
+  "Generate a single table migration statement."
+  [table]
+  (let [{:keys [name fields]} table]
     (str "CREATE TABLE " name
-         " ("
+         " ( "
          (:name (first fields))
          " "
          (:type (first fields))
-         ", "
+         " , "
          (:name (last fields))
          " "
          (:type (last fields))
-         ");")))
+         " );")))
+
+
+(defn gen-migration
+  "Generate migrations for supplied data definitions structure."
+  [definitions]
+  (reduce (fn [acc table]
+            (str acc (gen-table-migration table) "\n"))
+          "" (:tables definitions))
+  )
 
 (comment
   (def test-table
@@ -85,3 +93,4 @@
   (let [{:keys [name fields]} (first (:tables test-table))]
     (first fields))
   )
+(gen-table-migration (first (:tables test-table)))
