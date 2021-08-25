@@ -2,7 +2,17 @@
   (:require [sql-migration-generator.utils.sql-gen :as sut]
             [cljs.test :as t :include-macros true]))
 
-(t/deftest sql-structure
+(t/deftest validation
+  (t/testing "empty map returns empty string"
+    (t/is (= ""
+             (sut/gen-migration {}))))
+
+  (t/testing "empty tables returns empty string"
+    (t/is (= ""
+             (sut/gen-migration {:tables []}))))
+  )
+
+(t/deftest create-tables
 
   (t/testing "table without relationships"
     (t/is (= "CREATE TABLE TestTable ( ID int , Name varchar(255) );\n"
