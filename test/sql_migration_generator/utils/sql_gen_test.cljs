@@ -10,6 +10,11 @@
   (t/testing "empty tables returns empty string"
     (t/is (= ""
              (sut/gen-migration {:tables []}))))
+
+  (t/testing "empty tables & empty relationships returns empty string"
+    (t/is (= ""
+             (sut/gen-migration {:tables []
+                                 :relationships []}))))
   )
 
 (t/deftest create-tables
